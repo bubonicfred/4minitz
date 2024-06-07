@@ -2,10 +2,10 @@ import { MinutesSchema } from "/imports/collections/minutes.schema";
 import { TopicSchema } from "/imports/collections/topic.schema";
 
 export class MigrateV23 {
-  static migrateTopicCollection() {
+  static async migrateTopicCollection() {
     const topics = TopicSchema.getCollection().find({});
 
-    topics.forEach((topic) => {
+    await topics.forEachAsync((topic) => {
       if (Array.isArray(topic.responsibles)) {
         return;
       }
@@ -15,9 +15,9 @@ export class MigrateV23 {
     });
   }
 
-  static migrateMinutesCollection() {
+  static async migrateMinutesCollection() {
     const minutes = MinutesSchema.getCollection().find({});
-    minutes.forEach((minutes) => {
+    await minutes.forEachAsync((minutes) => {
       // copy over the topics as they are and just replace the responsibles
       // field:
       //  * keep responsibles if they are set properly

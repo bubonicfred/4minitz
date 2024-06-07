@@ -10,7 +10,7 @@ if (allowSelfSignedTLS) {
 LDAP.searchField = LdapSettings.usernameAttribute();
 LDAP.searchValueType = "username";
 
-LDAP.bindValue = (usernameOrEmail, isEmailAddress) => {
+LDAP.bindValue = async (usernameOrEmail, isEmailAddress) => {
   if (!LdapSettings.ldapEnabled()) {
     return "";
   }
@@ -33,7 +33,7 @@ LDAP.bindValue = (usernameOrEmail, isEmailAddress) => {
   if (Meteor?.users) {
     // skip this during unit tests
     const uid = username.toLowerCase();
-    const user = Meteor.users.findOne({ username: uid });
+    const user = await Meteor.users.findOneAsync({ username: uid });
 
     if (user?.isInactive) {
       throw new Meteor.Error(403, "User is inactive");
@@ -74,8 +74,8 @@ LDAP.addFields = () => ({
 // Called after successful LDAP sign in
 if (LDAP.onSignIn) {
   // not available in unit test environment
-  LDAP.onSignIn((userDocument) => {
-    Meteor.users.update(
+  LDAP.onSignIn(async userDocument => {
+    await Meteor.users.updateAsync(
       { _id: userDocument._id },
       { $set: { isLDAPuser: true } },
     );

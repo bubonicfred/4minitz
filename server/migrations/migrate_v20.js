@@ -47,7 +47,7 @@ function forEachDetailInMinutes(minutes, operation) {
 
 // Details: add field: isNew
 export class MigrateV20 {
-  static up() {
+  static async up() {
     const allTopics = TopicSchema.getCollection().find();
     forEachDetailInTopics(allTopics, (detail) => {
       detail.isNew = false;
@@ -55,7 +55,7 @@ export class MigrateV20 {
     saveTopics(allTopics);
 
     const allMinutes = MinutesSchema.getCollection().find();
-    allMinutes.forEach((min) => {
+    await allMinutes.forEachAsync((min) => {
       forEachDetailInTopics(min.topics, (detail) => {
         detail.isNew = detail.createdInMinute === min._id;
       });

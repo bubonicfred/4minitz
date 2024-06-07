@@ -31,8 +31,8 @@ class TopicsHandler {
     this.visibilityDict = {};
   }
 
-  iterateOverTopics() {
-    this.topicsCollection.find().forEach((topic) => {
+  async iterateOverTopics() {
+    await this.topicsCollection.find().forEachAsync((topic) => {
       const relatedSeriesId = topic.parentId;
       const visibleFor = this._determineAllowedUsersOfSeries(relatedSeriesId);
       this._updateTopicsVisibleForField(topic, visibleFor);

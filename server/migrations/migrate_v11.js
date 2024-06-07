@@ -2,12 +2,12 @@ import { Meteor } from "meteor/meteor";
 
 // add isDemoUser:true to username: demo with expected "demo" password
 export class MigrateV11 {
-  static up() {
-    const demoUser = Meteor.users.findOne({ username: "demo" });
+  static async up() {
+    const demoUser = await Meteor.users.findOneAsync({ username: "demo" });
     if (demoUser) {
-      Meteor.users.update({ username: "demo" }, { $set: { isDemoUser: true } });
+      await Meteor.users.updateAsync({ username: "demo" }, { $set: { isDemoUser: true } });
       if (demoUser.isInactive === undefined) {
-        Meteor.users.update(
+        await Meteor.users.updateAsync(
           { username: "demo" },
           { $set: { isInactive: false } },
         );
@@ -15,10 +15,10 @@ export class MigrateV11 {
     }
   }
 
-  static down() {
-    const demoUser = Meteor.users.findOne({ username: "demo" });
+  static async down() {
+    const demoUser = await Meteor.users.findOneAsync({ username: "demo" });
     if (demoUser) {
-      Meteor.users.update(
+      await Meteor.users.updateAsync(
         { username: "demo" },
         { $unset: { isDemoUser: false } },
       );

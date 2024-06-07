@@ -13,11 +13,11 @@ export class MigrateV6 {
         item.responsibles = [];
         if (item.responsible) {
           const resp = item.responsible.split(",");
-          resp.forEach((oneResp, index, array) => {
+          resp.forEach(async (oneResp, index, array) => {
             oneResp = oneResp.trim();
             // let's try if this is a valid username.
             // If yes: we store this user's _id instead of its name!
-            const userTry = Meteor.users.findOne({ username: oneResp });
+            const userTry = await Meteor.users.findOneAsync({ username: oneResp });
             if (userTry) {
               oneResp = userTry._id;
             }
@@ -42,34 +42,34 @@ export class MigrateV6 {
     });
   }
 
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV6._upgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection());
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV6._upgradeTopics(series.openTopics);
         MigrateV6._upgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection());
       });
   }
 
-  static down() {
-    MinutesSchema.getCollection()
+  static async down() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV6._downgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection());
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV6._downgradeTopics(series.openTopics);
         MigrateV6._downgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection());

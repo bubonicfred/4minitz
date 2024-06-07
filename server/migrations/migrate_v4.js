@@ -6,7 +6,7 @@ import { updateTopicsOfSeriesPre16 } from "./helpers/updateSeries";
 
 // Topics: convert the responsible (string) => responsibles (array) fields
 export class MigrateV4 {
-  static up() {
+  static async up() {
     const migrateTopicsUp = (topic) => {
       topic.responsibles = [];
       if (topic.responsible) {
@@ -14,17 +14,17 @@ export class MigrateV4 {
       }
     };
 
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         minute.topics.forEach(migrateTopicsUp);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection(), {
           bypassCollection2: true,
         });
       });
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((meeting) => {
+      .forEachAsync((meeting) => {
         meeting.topics.forEach(migrateTopicsUp);
         meeting.openTopics.forEach(migrateTopicsUp);
 
@@ -36,7 +36,7 @@ export class MigrateV4 {
       });
   }
 
-  static down() {
+  static async down() {
     const migrateTopicsDown = (topic) => {
       if (topic.responsibles) {
         topic.responsible = topic.responsibles.join();
@@ -44,18 +44,18 @@ export class MigrateV4 {
       }
     };
 
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         minute.topics.forEach(migrateTopicsDown);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection(), {
           bypassCollection2: true,
         });
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((meeting) => {
+      .forEachAsync((meeting) => {
         meeting.topics.forEach(migrateTopicsDown);
         meeting.openTopics.forEach(migrateTopicsDown);
 

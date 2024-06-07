@@ -37,8 +37,8 @@ i18n.setLocale("en");
  *     search.
  * @returns {Object|null} - The found demo user object, or null if not found.
  */
-const findDemoUser = (additionalCriteria = {}) => {
-  return Meteor.users.findOne({
+const findDemoUser = async (additionalCriteria = {}) => {
+  await Meteor.users.findOneAsync({
     $and: [
       { username: "demo" },
       { isDemoUser: true },
@@ -54,20 +54,20 @@ const findDemoUser = (additionalCriteria = {}) => {
  *
  * @param {Object} updates - The updates to apply to the demo user.
  */
-const updateDemoUser = (updates) => {
-  Meteor.users.update({ username: "demo" }, { $set: updates });
+const updateDemoUser = async updates => {
+  await Meteor.users.updateAsync({ username: "demo" }, { $set: updates });
 };
 /**
  * Creates a demo user account.
  */
-const createDemoUser = () => {
+const createDemoUser = async () => {
   Accounts.createUser({
     username: "demo",
     password: "demo",
     email: "",
     profile: { name: "Demo User" },
   });
-  updateDemoUser({
+  await updateDemoUser({
     isDemoUser: true,
     isInactive: false,
     "emails.0.verified": true,
@@ -76,21 +76,21 @@ const createDemoUser = () => {
     "*** ATTENTION ***\n    Created demo/demo user account once on startup",
   );
 };
-const handleDemoUserAccount = () => {
+const handleDemoUserAccount = async () => {
   if (GlobalSettings.createDemoAccount()) {
-    const demoUser = findDemoUser();
+    const demoUser = await findDemoUser();
     if (demoUser) {
       // we already have one, let's ensure he is not switched Inactive
       if (demoUser.isInactive) {
-        updateDemoUser({ isInactive: false });
+        await updateDemoUser({ isInactive: false });
       }
       if (!demoUser.emails[0].verified) {
-        updateDemoUser({ "emails.0.verified": true });
+        await updateDemoUser({ "emails.0.verified": true });
       }
       return;
     }
     // we don't have a demo user, but settings demand one
-    createDemoUser();
+    await createDemoUser();
     return;
   }
   /**
@@ -98,11 +98,11 @@ const handleDemoUserAccount = () => {
    *
    * @type {Object}
    */
-  const demoUserActive = findDemoUser({ isInactive: false });
+  const demoUserActive = await findDemoUser({ isInactive: false });
   // we don't want a demo user
   if (demoUserActive) {
     // set demo account to Inactive
-    updateDemoUser({ isInactive: true });
+    await updateDemoUser({ isInactive: true });
     console.log(
       "*** ATTENTION ***\n    De-activated demo/demo user account (isInactive: true)",
     );
@@ -112,7 +112,7 @@ const handleDemoUserAccount = () => {
    *
    * @type {User}
    */
-  const demoUserActiveAgain = findDemoUser({ isInactive: false });
+  const demoUserActiveAgain = await findDemoUser({ isInactive: false });
   // #Security: warn admin if demo user exists
   if (demoUserActiveAgain) {
     console.log(
@@ -163,7 +163,7 @@ const syncRootUrl = () => {
   Meteor.settings.ROOT_URL = process.env.ROOT_URL;
 };
 
-Meteor.startup(() => {
+Meteor.startup(async () => {
   syncRootUrl();
   console.log(`*** ROOT_URL: ${Meteor.settings.ROOT_URL}`);
 
@@ -183,11 +183,11 @@ Meteor.startup(() => {
   // Migrations.migrateTo(12);     // Plz. keep this comment for manual
   // testing... ;-)
 
-  handleDemoUserAccount();
+  await handleDemoUserAccount();
 
   // If we find no admin broadcast messages, we create an INactive one for
   // easy re-activating.
-  if (BroadcastMessageSchema.find().count() === 0) {
+  if ((await BroadcastMessageSchema.find().countAsync()) === 0) {
     // #I18N: No translation here. We don't have a logged in user, so we can't
     // know the desired language But admin may do so in Admin frontend where
     // messages can be overwritten.

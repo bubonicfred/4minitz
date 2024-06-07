@@ -20,7 +20,7 @@ export class MigrateV18 {
     minutesIterator.iterate();
   }
 
-  static down() {
+  static async down() {
     const transformTopic = (topic) => {
       delete topic.createdAt;
       delete topic.updatedAt;
@@ -39,16 +39,16 @@ export class MigrateV18 {
       return topic;
     };
 
-    TopicSchema.getCollection()
+    await TopicSchema.getCollection()
       .find()
-      .forEach((topic) => {
+      .forEachAsync((topic) => {
         topic = transformTopic(topic);
         TopicSchema.getCollection().update(topic._id, { $set: topic });
       });
 
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minutes) => {
+      .forEachAsync((minutes) => {
         minutes.topics = minutes.topics.map(transformTopic);
         updateTopicFieldOfMinutes(minutes);
       });

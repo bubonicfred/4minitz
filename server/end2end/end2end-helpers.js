@@ -26,40 +26,40 @@ if (Meteor.settings.isEnd2EndTest) {
     "e2e.debugLog"(message) {
       console.log(message);
     },
-    "e2e.resetMyApp"(skipUsersCreation) {
+    async "e2e.resetMyApp"(skipUsersCreation) {
       console.log("-------------------------- E2E-METHOD: resetMyApp ");
       AttachmentsCollection.remove({});
       console.log(
-        `Count AttachmentsCollection after reset:${AttachmentsCollection.find().count()}`,
+        `Count AttachmentsCollection after reset:${await AttachmentsCollection.find().countAsync()}`,
       );
       // remove the meeting series attachment dir
-      MeetingSeriesSchema.getCollection()
+      (await MeetingSeriesSchema.getCollection()
         .find()
-        .fetch()
+        .fetchAsync())
         .forEach((ms) => {
           removeMeetingSeriesAttachmentDir(ms._id); // eslint-disable-line
         });
       MeetingSeriesSchema.remove({});
       console.log(
-        `Count MeetingSeries after reset:${MeetingSeriesSchema.find().count()}`,
+        `Count MeetingSeries after reset:${await MeetingSeriesSchema.find().countAsync()}`,
       );
       MinutesSchema.remove({});
-      console.log(`Count Minutes after reset:${MinutesSchema.find().count()}`);
+      console.log(`Count Minutes after reset:${await MinutesSchema.find().countAsync()}`);
       TestMailCollection.remove({});
       console.log(
-        `Count saved test mails after reset:${TestMailCollection.find().count()}`,
+        `Count saved test mails after reset:${await TestMailCollection.find().countAsync()}`,
       );
       BroadcastMessageSchema.remove({});
       TopicSchema.remove({});
       DocumentsCollection.remove({});
       console.log(
-        `Count Protocls after reset:${DocumentsCollection.find().count()}`,
+        `Count Protocls after reset:${await DocumentsCollection.find().countAsync()}`,
       );
       resetDocumentStorageDirectory(); // eslint-disable-line
 
       if (!skipUsersCreation) {
         // Reset users and create our e2e test users
-        Meteor.users.remove({});
+        await Meteor.users.removeAsync({});
         for (const i in Meteor.settings.e2eTestUsers) {
           const newUser = Meteor.settings.e2eTestUsers[i];
           const newPassword = Meteor.settings.e2eTestPasswords[i];
@@ -69,14 +69,14 @@ if (Meteor.settings.isEnd2EndTest) {
             password: newPassword,
             email: newEmail,
           });
-          Meteor.users.update(
+          await Meteor.users.updateAsync(
             { username: newUser },
             { $set: { "emails.0.verified": true } },
           );
           console.log(`Created user: ${newUser} with password: ${newPassword}`);
         }
         if (Meteor.settings.e2eAdminUser) {
-          Meteor.users.update(
+          await Meteor.users.updateAsync(
             { username: Meteor.settings.e2eAdminUser },
             { $set: { isAdmin: true } },
           );
@@ -97,27 +97,27 @@ if (Meteor.settings.isEnd2EndTest) {
       );
       return calculateAndCreateStoragePath(); // eslint-disable-line
     },
-    "e2e.countMeetingSeriesInMongDB"() {
+    async "e2e.countMeetingSeriesInMongDB"() {
       console.log("-------------------------- E2E-METHOD: countMeetingSeries");
-      return MeetingSeriesSchema.find({}).count();
+      await MeetingSeriesSchema.find({}).countAsync();
     },
-    "e2e.countMinutesInMongoDB"() {
+    async "e2e.countMinutesInMongoDB"() {
       console.log("-------------------------- E2E-METHOD: countMinutesSeries");
-      return MinutesSchema.find({}).count();
+      await MinutesSchema.find({}).countAsync();
     },
-    "e2e.countAttachmentsInMongoDB"() {
+    async "e2e.countAttachmentsInMongoDB"() {
       console.log(
         "-------------------------- E2E-METHOD: countAttachmentsInMongoDB",
       );
-      return AttachmentsCollection.find({}).count();
+      await AttachmentsCollection.find({}).countAsync();
     },
-    "e2e.getAttachmentsForMinute"(minID) {
+    async "e2e.getAttachmentsForMinute"(minID) {
       console.log(
         "-------------------------- E2E-METHOD: getAttachmentsForMinute",
       );
-      return AttachmentsCollection.find({
+      await AttachmentsCollection.find({
         "meta.meetingminutes_id": minID,
-      }).fetch();
+      }).fetchAsync();
     },
     "e2e.getPresentParticipantNames"(minutesId) {
       console.log(
@@ -132,8 +132,8 @@ if (Meteor.settings.isEnd2EndTest) {
     "e2e.resetTestMailDB"() {
       TestMailCollection.remove({});
     },
-    "e2e.findSentMails"(...args) {
-      return TestMailCollection.find(...args).map((mail) => {
+    async "e2e.findSentMails"(...args) {
+      await TestMailCollection.find(...args).mapAsync((mail) => {
         return {
           _id: mail._id,
           to: mail.to,
@@ -158,11 +158,11 @@ if (Meteor.settings.isEnd2EndTest) {
       );
       return TopicsFinder.allTopicsOfMeetingSeries(MSid);
     },
-    "e2e.countProtocolsInMongoDB"() {
+    async "e2e.countProtocolsInMongoDB"() {
       console.log(
         "-------------------------- E2E-METHOD: countProtocolsInMongoDB",
       );
-      return DocumentsCollection.find({}).count();
+      await DocumentsCollection.find({}).countAsync();
     },
     "e2e.setSettingsForProtocolGeneration"(format) {
       console.log(
@@ -202,9 +202,9 @@ if (Meteor.settings.isEnd2EndTest) {
       const protocol = DocumentGeneration.getProtocolForMinute(minuteId);
       return protocol ? protocol.link() : undefined;
     },
-    "e2e.getUserRole"(MSid, i) {
+    async "e2e.getUserRole"(MSid, i) {
       console.log("-------------------------- E2E-METHOD: getUserRole");
-      const usr = Meteor.users.findOne({
+      const usr = await Meteor.users.findOneAsync({
         username: Meteor.settings.e2eTestUsers[i],
       });
       if (usr.roles?.[MSid] && usr.roles[MSid][0]) {
@@ -216,9 +216,9 @@ if (Meteor.settings.isEnd2EndTest) {
       console.log("-------------------------- E2E-METHOD: findMinute");
       return MinutesSchema.getCollection().findOne(minuteID);
     },
-    "e2e.getUserId"(i) {
+    async "e2e.getUserId"(i) {
       console.log("-------------------------- E2E-METHOD: getUserId");
-      const usr = Meteor.users.findOne({
+      const usr = await Meteor.users.findOneAsync({
         username: Meteor.settings.e2eTestUsers[i],
       });
       return usr._id;
@@ -239,12 +239,12 @@ if (Meteor.settings.isEnd2EndTest) {
       console.log("-------------------------- E2E-METHOD: triggerMigration");
       Migrations.migrateTo(version);
     },
-    "e2e.removeLdapUsersFromDb"() {
-      Meteor.users.remove({ isLdapUser: true });
-      return Meteor.call("e2e.countUsers");
+    async "e2e.removeLdapUsersFromDb"() {
+      await Meteor.users.removeAsync({ isLdapUser: true });
+      await Meteor.callAsync("e2e.countUsers");
     },
-    "e2e.countUsers"() {
-      return Meteor.users.find().count();
+    async "e2e.countUsers"() {
+      await Meteor.users.find().countAsync();
     },
     async "e2e.importLdapUsers"() {
       const mongoUrl = process.env.MONGO_URL;

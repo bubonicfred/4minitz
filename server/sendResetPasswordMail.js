@@ -5,8 +5,8 @@ import { Accounts } from "meteor/accounts-base";
 // a check for user.isLDAPuser in advance. Because LDAP users
 // should not be able to change their passwords via this WebApp.
 const originalSendResetPasswordEmail = Accounts.sendResetPasswordEmail;
-Accounts.sendResetPasswordEmail = (userId, email) => {
-  const user = Meteor.users.findOne(userId);
+Accounts.sendResetPasswordEmail = async (userId, email) => {
+  const user = await Meteor.users.findOneAsync(userId);
   if (user.isLDAPuser) {
     throw new Meteor.Error(
       418,

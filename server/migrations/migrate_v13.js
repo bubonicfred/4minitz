@@ -19,19 +19,19 @@ export class MigrateV13 {
     });
   }
 
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV13._upgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection(), {
           bypassCollection2: true,
         });
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV13._upgradeTopics(series.openTopics);
         MigrateV13._upgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection(), {
@@ -40,19 +40,19 @@ export class MigrateV13 {
       });
   }
 
-  static down() {
-    MinutesSchema.getCollection()
+  static async down() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV13._downgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection(), {
           bypassCollection2: true,
         });
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV13._downgradeTopics(series.openTopics);
         MigrateV13._downgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection(), {

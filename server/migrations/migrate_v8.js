@@ -2,10 +2,10 @@ import { MeetingSeriesSchema } from "/imports/collections/meetingseries.schema";
 
 // MeetingSeries: add responsiblesFreeText field
 export class MigrateV8 {
-  static up() {
-    MeetingSeriesSchema.getCollection()
+  static async up() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MeetingSeriesSchema.getCollection().update(
           series._id,
           { $set: { additionalResponsibles: [] } },
@@ -14,10 +14,10 @@ export class MigrateV8 {
       });
   }
 
-  static down() {
-    MeetingSeriesSchema.getCollection()
+  static async down() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MeetingSeriesSchema.getCollection().update(
           series._id,
           { $unset: { additionalResponsibles: "" } },

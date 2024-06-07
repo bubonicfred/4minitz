@@ -15,10 +15,10 @@ export class MigrateItemsPre16 {
     this._doMigration();
   }
 
-  _doMigration() {
-    MinutesSchema.getCollection()
+  async _doMigration() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         this._migrateTopics(minute.topics);
 
         // We switch off bypassCollection2 here, to skip .clean & .validate to
@@ -30,9 +30,9 @@ export class MigrateItemsPre16 {
         );
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         this._migrateTopics(series.openTopics);
         this._migrateTopics(series.topics);
 

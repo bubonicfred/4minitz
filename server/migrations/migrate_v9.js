@@ -4,10 +4,10 @@ import { MinutesSchema } from "/imports/collections/minutes.schema";
 // add minutes.finalizedVersion
 // add minutes.finalizedHistory
 export class MigrateV9 {
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         if (!minute.finalizedVersion) {
           minute.finalizedVersion = 0;
           if (minute.isFinalized) {
@@ -34,11 +34,11 @@ export class MigrateV9 {
       });
   }
 
-  static down() {
+  static async down() {
     // We switch off bypassCollection2 here to avoid useless schema exceptions
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MinutesSchema.getCollection().update(
           minute._id,
           { $set: { isUnfinalized: !minute.isFinalized } },

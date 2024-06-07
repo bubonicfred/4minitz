@@ -29,10 +29,10 @@ export class MigrateV7 {
     });
   }
 
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV7._upgradeTopics(minute.topics);
 
         // We use getCollection() here to skip .clean & .validate to allow empty
@@ -42,9 +42,9 @@ export class MigrateV7 {
         });
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV7._upgradeTopics(series.openTopics);
         MigrateV7._upgradeTopics(series.topics);
 
@@ -67,10 +67,10 @@ export class MigrateV7 {
       });
   }
 
-  static down() {
-    MinutesSchema.getCollection()
+  static async down() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV7._downgradeTopics(minute.topics);
 
         // We use getCollection() here to skip .clean & .validate to allow empty
@@ -80,9 +80,9 @@ export class MigrateV7 {
         });
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV7._downgradeTopics(series.openTopics);
         MigrateV7._downgradeTopics(series.topics);
 

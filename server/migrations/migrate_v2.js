@@ -2,10 +2,10 @@ import { MinutesSchema } from "/imports/collections/minutes.schema";
 
 // convert the participants fields
 export class MigrateV2 {
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         if (!minute.participants) {
           minute.participants = "";
         }
@@ -25,11 +25,11 @@ export class MigrateV2 {
       });
   }
 
-  static down() {
+  static async down() {
     // We switch off bypassCollection2 here to avoid useless schema exceptions
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MinutesSchema.getCollection().update(
           minute._id,
           { $set: { participants: minute.participantsAdditional } },

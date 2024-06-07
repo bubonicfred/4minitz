@@ -22,9 +22,9 @@ export class MigrateV24 {
     return { ...topic, infoItems: fixedInfoItems };
   }
 
-  static migrateMinutesCollection() {
+  static async migrateMinutesCollection() {
     const minutes = MinutesSchema.find({});
-    minutes.forEach((singleMinute) => {
+    await minutes.forEachAsync((singleMinute) => {
       const topics = singleMinute.topics.map((topic) => this.fixTopic(topic));
       MinutesSchema.getCollection().update(singleMinute._id, {
         $set: { topics },

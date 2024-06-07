@@ -20,34 +20,34 @@ export class MigrateV5 {
     });
   }
 
-  static up() {
-    MinutesSchema.getCollection()
+  static async up() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV5._upgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection());
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV5._upgradeTopics(series.openTopics);
         MigrateV5._upgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection());
       });
   }
 
-  static down() {
-    MinutesSchema.getCollection()
+  static async down() {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         MigrateV5._downgradeTopics(minute.topics);
         updateTopicsOfMinutes(minute, MinutesSchema.getCollection());
       });
 
-    MeetingSeriesSchema.getCollection()
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MigrateV5._downgradeTopics(series.openTopics);
         MigrateV5._downgradeTopics(series.topics);
         updateTopicsOfSeriesPre16(series, MeetingSeriesSchema.getCollection());

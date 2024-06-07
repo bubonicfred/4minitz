@@ -5,9 +5,9 @@ import { MinutesFinder } from "../../imports/services/minutesFinder";
 
 // preserve sortOrder of last minute to the topicCollection
 export class MigrateV19 {
-  static up() {
+  static async up() {
     const allSeries = MeetingSeriesSchema.getCollection().find();
-    allSeries.forEach((series) => {
+    await allSeries.forEachAsync((series) => {
       const minutes = MinutesFinder.lastMinutesOfMeetingSeries(series);
       if (minutes && minutes.isFinalized) {
         let i = 0;

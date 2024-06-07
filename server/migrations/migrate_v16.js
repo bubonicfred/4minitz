@@ -5,10 +5,10 @@ import { TopicSchema } from "../../imports/collections/topic.schema";
 // Delete fields meetingSeries.openTopics / meetingSeries.topics
 
 export class MigrateV16 {
-  static up() {
-    MeetingSeriesSchema.getCollection()
+  static async up() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         const meetingSeriesId = series._id;
 
         series.topics.reverse().forEach((topic) => {
@@ -24,15 +24,15 @@ export class MigrateV16 {
       });
   }
 
-  static down() {
-    MeetingSeriesSchema.getCollection()
+  static async down() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync(async series => {
         const topicsOfSeries = [];
         const openTopicsOfSeries = [];
-        TopicSchema.getCollection()
+        await TopicSchema.getCollection()
           .find({ parentId: series._id })
-          .forEach((topic) => {
+          .forEachAsync((topic) => {
             topicsOfSeries.unshift(topic);
             if (topic.isOpen) {
               openTopicsOfSeries.unshift(topic);

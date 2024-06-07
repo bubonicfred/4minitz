@@ -71,9 +71,9 @@ describe("Migrate Version 17", () => {
   });
 
   describe("#up", () => {
-    it("adds new fields to all meetingseries correctly", () => {
+    it("adds new fields to all meetingseries correctly", async () => {
       MigrateV17.up();
-      MeetingSeriesSchema.find().forEach((meetingSeries) => {
+      await MeetingSeriesSchema.find().forEachAsync((meetingSeries) => {
         const expectedMinuteId = meetingSeries.hasMinute ? "MIN_ID" : null;
         const expectedMinuteStatus =
           meetingSeries.hasMinute && meetingSeries.lastMinuteIsFinalized
@@ -89,16 +89,16 @@ describe("Migrate Version 17", () => {
   });
 
   describe("#down", () => {
-    beforeEach(() => {
-      MeetingSeriesSchema.find().forEach((meetingSeries) => {
+    beforeEach(async () => {
+      await MeetingSeriesSchema.find().forEachAsync((meetingSeries) => {
         meetingSeries.lastMinutesFinalized = true;
         meetingSeries.lastMinutesId = "MIN_ID";
       });
     });
 
-    it("removes the fields in all Meeting Series", () => {
+    it("removes the fields in all Meeting Series", async () => {
       MigrateV17.down();
-      MeetingSeriesSchema.find().forEach((meetingSeries) => {
+      await MeetingSeriesSchema.find().forEachAsync((meetingSeries) => {
         expect(meetingSeries).not.have.ownProperty("lastMinutesFinalized");
         expect(meetingSeries).not.have.ownProperty("lastMinutesId");
       });

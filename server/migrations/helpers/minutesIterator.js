@@ -8,9 +8,9 @@ export class MinutesIterator {
         this.meetingSeriesSchema = meetingSeriesSchema;
     }
 
-    iterate() {
+    async iterate() {
         const allSeries = this.meetingSeriesSchema.getCollection().find();
-        allSeries.forEach(series => {
+        await allSeries.forEachAsync(series => {
             this._iterateOverMinutesOfSeries(series);
             this.minutesHandler.finishedSeries(series);
         });

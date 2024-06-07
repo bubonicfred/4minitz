@@ -132,7 +132,7 @@ describe("workflow.finalizeMinute", function () {
   let minutes;
   let secondToLastMinutes;
   // skipcq: JS-0241
-  beforeEach(function () {
+  beforeEach(async function() {
     minutes = {
       meetingSeries_id: "AaBbCc01",
       _id: "AaBbCc02",
@@ -159,10 +159,10 @@ describe("workflow.finalizeMinute", function () {
 
     Meteor.userId.returns("12");
 
-    Meteor.user.returns(user);
+    await Meteor.userAsync.returns(user);
   });
   // skipcq: JS-0241
-  afterEach(function () {
+  afterEach(async function() {
     Meteor.isClient = true;
 
     Minutes.resetHistory();
@@ -170,7 +170,7 @@ describe("workflow.finalizeMinute", function () {
     MinutesSchema.update.resetHistory();
     UserRoles.resetHistory();
     Meteor.userId.resetHistory();
-    Meteor.user.resetHistory();
+    await Meteor.userAsync.resetHistory();
   });
   // skipcq: JS-0241
   it("throws an exception if the user is not logged in", function () {
@@ -264,7 +264,7 @@ describe("workflow.unfinalizeMinute", function () {
   let secondToLastMinutes;
   let meetingSeries;
   // skipcq: JS-0241
-  beforeEach(function () {
+  beforeEach(async function() {
     const minutesId = "AaBbCc02";
 
     meetingSeries = {
@@ -305,10 +305,10 @@ describe("workflow.unfinalizeMinute", function () {
     MinutesFinder.secondLastMinutesOfMeetingSeries.returns(secondToLastMinutes);
 
     Meteor.userId.returns("12");
-    Meteor.user.returns(user);
+    await Meteor.userAsync.returns(user);
   });
   // skipcq: JS-0241
-  afterEach(function () {
+  afterEach(async function() {
     Meteor.isClient = true;
 
     Minutes.resetHistory();
@@ -319,7 +319,7 @@ describe("workflow.unfinalizeMinute", function () {
     MeetingSeriesSchema.findOne.resetHistory();
     UserRoles.resetHistory();
     Meteor.userId.resetHistory();
-    Meteor.user.resetHistory();
+    await Meteor.userAsync.resetHistory();
   });
   // skipcq: JS-0241
   it("sets isFinalized to false", function () {

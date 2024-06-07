@@ -3,10 +3,10 @@ import { MinutesFinder } from "/imports/services/minutesFinder";
 
 // MeetingSeries: add fields: lastMinutesFinalized, lastMinutesId
 export class MigrateV17 {
-  static up() {
-    MeetingSeriesSchema.getCollection()
+  static async up() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         const lastMin = MinutesFinder.lastMinutesOfMeetingSeries(series);
         const isFinalized = lastMin ? lastMin.isFinalized : false;
         const lastMinId = lastMin ? lastMin._id : null;
@@ -23,10 +23,10 @@ export class MigrateV17 {
       });
   }
 
-  static down() {
-    MeetingSeriesSchema.getCollection()
+  static async down() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         MeetingSeriesSchema.getCollection().update(
           series._id,
           { $unset: { lastMinutesFinalized: false, lastMinutesId: null } },

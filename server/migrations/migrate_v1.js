@@ -36,10 +36,10 @@ export class MigrateV1 {
     this._updateMeetingSeries(topicModifier);
   }
 
-  static _updateTopics(modifyTopic) {
-    MinutesSchema.getCollection()
+  static async _updateTopics(modifyTopic) {
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minute) => {
+      .forEachAsync((minute) => {
         minute.topics.forEach((topic, index) => {
           topic = modifyTopic(topic, minute);
 
@@ -53,10 +53,10 @@ export class MigrateV1 {
       });
   }
 
-  static _updateMeetingSeries(modifyTopic) {
-    MeetingSeriesSchema.getCollection()
+  static async _updateMeetingSeries(modifyTopic) {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         const iterateTopics = (propertyName) => {
           return (topic, index) => {
             topic = modifyTopic(topic);

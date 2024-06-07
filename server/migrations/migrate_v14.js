@@ -1,24 +1,24 @@
 import { Meteor } from "meteor/meteor";
 
 export class MigrateV14 {
-  static up() {
-    const demoUser = Meteor.users.findOne({
+  static async up() {
+    const demoUser = await Meteor.users.findOneAsync({
       $and: [{ username: "demo" }, { isDemoUser: true }],
     });
     if (demoUser) {
-      Meteor.users.update(
+      await Meteor.users.updateAsync(
         { username: "demo" },
         { $set: { "emails.0.verified": true } },
       );
     }
   }
 
-  static down() {
-    const demoUser = Meteor.users.findOne({
+  static async down() {
+    const demoUser = await Meteor.users.findOneAsync({
       $and: [{ username: "demo" }, { isDemoUser: true }],
     });
     if (demoUser) {
-      Meteor.users.update(
+      await Meteor.users.updateAsync(
         { username: "demo" },
         { $set: { "emails.0.verified": false } },
       );

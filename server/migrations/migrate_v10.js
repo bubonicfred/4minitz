@@ -80,27 +80,27 @@ class MigrateSeriesUp {
 // add "createdInMinute" attribute for topics
 // --> update all existing topics in all minutes and meeting series!
 export class MigrateV10 {
-  static up() {
+  static async up() {
     console.log(
       "% Progress - updating all topics. This might take several minutes...",
     );
     const allSeries = MeetingSeriesSchema.getCollection().find();
-    allSeries.forEach((series) => {
+    await allSeries.forEachAsync((series) => {
       new MigrateSeriesUp(series).run();
     });
   }
 
-  static down() {
-    MeetingSeriesSchema.getCollection()
+  static async down() {
+    await MeetingSeriesSchema.getCollection()
       .find()
-      .forEach((series) => {
+      .forEachAsync((series) => {
         series.topics = MigrateV10._downgradeTopics(series.topics);
         series.openTopics = MigrateV10._downgradeTopics(series.openTopics);
         saveSeries(series);
       });
-    MinutesSchema.getCollection()
+    await MinutesSchema.getCollection()
       .find()
-      .forEach((minutes) => {
+      .forEachAsync((minutes) => {
         minutes.topics = MigrateV10._downgradeTopics(minutes.topics);
         saveMinutes(minutes);
       });
