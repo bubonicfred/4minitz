@@ -1,4 +1,4 @@
-import { _ } from "lodash";
+import { Util as _ } from "./utils";
 import { Blaze } from "meteor/blaze";
 import { Template } from "meteor/templating";
 import { i18n } from "meteor/universe:i18n";

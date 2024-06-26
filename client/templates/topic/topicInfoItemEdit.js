@@ -7,7 +7,7 @@ import { Minutes } from "/imports/minutes";
 import { Priority } from "/imports/priority";
 import { Topic } from "/imports/topic";
 import { User, userSettings } from "/imports/user";
-import { _ } from "lodash";
+import { _ } from "../../../imports/helpers/utls";
 import { Meteor } from "meteor/meteor";
 import { ReactiveDict } from "meteor/reactive-dict";
 import { ReactiveVar } from "meteor/reactive-var";

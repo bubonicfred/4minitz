@@ -4,7 +4,7 @@ import { configureSelect2Responsibles } from "/imports/client/ResponsibleSearch"
 import { MeetingSeries } from "/imports/meetingseries";
 import { Minutes } from "/imports/minutes";
 import { Topic } from "/imports/topic";
-import { _ } from "lodash";
+import { Util as _ } from "../../../imports/helpers/utils";
 import { $ } from "meteor/jquery";
 import { Meteor } from "meteor/meteor";
 import { Session } from "meteor/session";
@@ -66,7 +66,7 @@ Template.topicEdit.events({
       const editTopic = getEditTopic();
       const topicDoc = {};
       if (editTopic) {
-        _.extend(topicDoc, editTopic._topicDoc);
+        _.assignIn(topicDoc, editTopic._topicDoc);
       }
 
       let labels = tmpl.$("#id_item_selLabels").val();

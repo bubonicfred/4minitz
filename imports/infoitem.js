@@ -1,16 +1,15 @@
 /**
  * A InfoItem is a sub-element of
- * a topic which has a subject,
+ * a topic which has a subject,>
  * a date when is was created
  * and a list of associated tags.
  */
-import { User } from "/imports/user";
 import { _ } from "lodash";
 import { Meteor } from "meteor/meteor";
 import { Random } from "meteor/random";
-
-import { formatDateISO8601 } from "./helpers/date";
-import { StringUtils } from "./helpers/string-utils";
+import { formatDateISO8601 } from "./helpers/date.js";
+import { StringUtils } from "./helpers/string-utils.js";
+import { User } from "./user.js";
 
 /**
  * The InfoItem class represents an information item in a topic.

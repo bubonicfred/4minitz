@@ -1,4 +1,4 @@
-import { _ } from "lodash";
+import { Util _ } from "./helpers/utils";
 
 import { AttachmentsCollection } from "./collections/attachments_private";
 import { Minutes } from "./minutes";
