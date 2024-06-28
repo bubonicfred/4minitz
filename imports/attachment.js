@@ -1,7 +1,7 @@
-import {AttachmentsCollection} from "./collections/attachments_private";
-import {Util as _} from "./helpers/utils";
-import {Minutes} from "./minutes";
-import {UserRoles} from "./userroles";
+import { AttachmentsCollection } from "./collections/attachments_private";
+import { Util as _ } from "./helpers/utils";
+import { Minutes } from "./minutes";
+import { UserRoles } from "./userroles";
 
 /**
  * Represents an attachment in the system.
@@ -20,7 +20,7 @@ export class Attachment {
     this._file = AttachmentsCollection.findOne(attachmentID);
     if (!this._file) {
       throw new Error(
-          `Attachment(): Could not retrieve attachment for ID ${attachmentID}`,
+        `Attachment(): Could not retrieve attachment for ID ${attachmentID}`,
       );
     }
   }
@@ -32,7 +32,7 @@ export class Attachment {
    * @returns {Mongo.Cursor} - A cursor pointing to the attachments found.
    */
   static findForMinutes(minID) {
-    return AttachmentsCollection.find({"meta.meetingminutes_id" : minID});
+    return AttachmentsCollection.find({ "meta.meetingminutes_id": minID });
   }
 
   /**
@@ -40,7 +40,9 @@ export class Attachment {
    *
    * @returns {number} The count of attachments.
    */
-  static countAll() { return AttachmentsCollection.find().count(); }
+  static countAll() {
+    return AttachmentsCollection.find().count();
+  }
 
   /**
    * Returns the count of attachments associated with a given minute ID.
@@ -57,9 +59,11 @@ export class Attachment {
    * @returns {number} The total size of all attachments in bytes.
    */
   static countAllBytes() {
-    const atts = AttachmentsCollection.find({}, {size : 1});
+    const atts = AttachmentsCollection.find({}, { size: 1 });
     let sumBytes = 0;
-    atts.forEach((att) => { sumBytes += att.size; });
+    atts.forEach((att) => {
+      sumBytes += att.size;
+    });
     return sumBytes;
   }
 
@@ -80,33 +84,36 @@ export class Attachment {
   static uploadFile(uploadFilename, minutesObj, callbacks = {}) {
     const doNothing = () => {};
     callbacks = _.assignIn(
-        {
-          onStart : doNothing,
-          onEnd : doNothing,
-          onAbort : doNothing,
-        },
-        callbacks,
+      {
+        onStart: doNothing,
+        onEnd: doNothing,
+        onAbort: doNothing,
+      },
+      callbacks,
     );
 
     const upload = AttachmentsCollection.insert(
-        {
-          file : uploadFilename,
-          streams : "dynamic",
-          chunkSize : "dynamic",
-          meta : {
-            meetingminutes_id : minutesObj._id,
-            parentseries_id : minutesObj.parentMeetingSeriesID(),
-          },
+      {
+        file: uploadFilename,
+        streams: "dynamic",
+        chunkSize: "dynamic",
+        meta: {
+          meetingminutes_id: minutesObj._id,
+          parentseries_id: minutesObj.parentMeetingSeriesID(),
         },
-        false,
+      },
+      false,
     );
 
-    upload.on("start", function() {
+    upload.on("start", function () {
       callbacks.onStart(this); // this == current upload object
     });
-    upload.on("end", (error, fileObj) => { callbacks.onEnd(error, fileObj); });
-    upload.on("abort",
-              (error, fileObj) => { callbacks.onAbort(error, fileObj); });
+    upload.on("end", (error, fileObj) => {
+      callbacks.onEnd(error, fileObj);
+    });
+    upload.on("abort", (error, fileObj) => {
+      callbacks.onAbort(error, fileObj);
+    });
 
     upload.start();
   }
@@ -117,8 +124,10 @@ export class Attachment {
    *     owner of the file, otherwise returns false.
    */
   isUploaderAndFileOwner() {
-    return (this._roles.isUploaderFor(this._file.meta.parentseries_id) &&
-            this._roles.getUserID() === this._file.userId);
+    return (
+      this._roles.isUploaderFor(this._file.meta.parentseries_id) &&
+      this._roles.getUserID() === this._file.userId
+    );
   }
 
   /**
