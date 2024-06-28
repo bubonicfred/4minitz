@@ -26,7 +26,14 @@ export class GlobalSettings {
   }
 
   static publishEmailSettings() {
-    const { email: { enableMailDelivery = false, sendVerificationEmail = false, showResendVerificationEmailLink = false, showForgotPasswordLink = false } = {} } = Meteor.settings;
+    const {
+      email: {
+        enableMailDelivery = false,
+        sendVerificationEmail = false,
+        showResendVerificationEmailLink = false,
+        showForgotPasswordLink = false,
+      } = {},
+    } = Meteor.settings;
     Meteor.settings.public = {
       ...Meteor.settings.public,
       enableMailDelivery,
@@ -37,7 +44,15 @@ export class GlobalSettings {
   }
 
   static publishBrandingSettings() {
-    const { branding: { topLeftLogoHTML = "4Minitz.com", showGithubCorner = true, showInfoOnLogin = true, createDemoAccount = false, legalNotice = { enabled: false, linkText: "", content: [""] } } = {} } = Meteor.settings.public;
+    const {
+      branding: {
+        topLeftLogoHTML = "4Minitz.com",
+        showGithubCorner = true,
+        showInfoOnLogin = true,
+        createDemoAccount = false,
+        legalNotice = { enabled: false, linkText: "", content: [""] },
+      } = {},
+    } = Meteor.settings.public;
     Meteor.settings.public.branding = {
       topLeftLogoHTML,
       showGithubCorner,
@@ -49,27 +64,33 @@ export class GlobalSettings {
 
   static publishAttachmentSettings() {
     Meteor.settings.public.attachments = {
-      enabled: getSetting('attachments.enabled', false),
-      allowExtensions: getSetting('attachments.allowExtensions', ".*"),
-      denyExtensions: getSetting('attachments.denyExtensions', "exe|app|bat|sh|cmd|com|cpl|exe|gad|hta|inf|jar|jpe|jse|lnk|msc|msh|msi|msp|pif|ps1|ps2|psc|reg|scf|scr|vbe|vbs|wsc|wsf|wsh"),
-      maxFileSize: getSetting('attachments.maxFileSize', 10 * 1024 * 1024), // default: 10 MB
+      enabled: getSetting("attachments.enabled", false),
+      allowExtensions: getSetting("attachments.allowExtensions", ".*"),
+      denyExtensions: getSetting(
+        "attachments.denyExtensions",
+        "exe|app|bat|sh|cmd|com|cpl|exe|gad|hta|inf|jar|jpe|jse|lnk|msc|msh|msi|msp|pif|ps1|ps2|psc|reg|scf|scr|vbe|vbs|wsc|wsf|wsh",
+      ),
+      maxFileSize: getSetting("attachments.maxFileSize", 10 * 1024 * 1024), // default: 10 MB
     };
   }
 
   static publishDocGenerationSettings() {
     Meteor.settings.public.docGeneration = {
-      enabled: getSetting('docGeneration.enabled', false),
-      format: getSetting('docGeneration.format', "html"),
+      enabled: getSetting("docGeneration.enabled", false),
+      format: getSetting("docGeneration.format", "html"),
     };
   }
 
   static publishAccountCreationSettings() {
-    Meteor.settings.public.forbidClientAccountCreation = getSetting('forbidClientAccountCreation', false);
+    Meteor.settings.public.forbidClientAccountCreation = getSetting(
+      "forbidClientAccountCreation",
+      false,
+    );
   }
 
   static enforceStoragePathSlash() {
-    const storagePath = getSetting('attachments.storagePath');
-    if (storagePath && !storagePath.endsWith('/')) {
+    const storagePath = getSetting("attachments.storagePath");
+    if (storagePath && !storagePath.endsWith("/")) {
       Meteor.settings.attachments.storagePath = `${storagePath}/`;
     }
   }
@@ -154,10 +175,9 @@ export class GlobalSettings {
       Meteor.settings.email.defaultEMailSenderExceptionDomains.length > 0
     ) {
       const senderDomain = alternativeSender.replace(/^.*@/, "").toLowerCase(); // me@mycompany.com => mycompany.com
-      for (const defaultEMailSenderExceptionDomain of Meteor.settings.email.defaultEMailSenderExceptionDomains) {
-        if (
-          defaultEMailSenderExceptionDomain.toLowerCase() === senderDomain
-        ) {
+      for (const defaultEMailSenderExceptionDomain of Meteor.settings.email
+        .defaultEMailSenderExceptionDomains) {
+        if (defaultEMailSenderExceptionDomain.toLowerCase() === senderDomain) {
           address = alternativeSender;
           break;
         }
@@ -273,7 +293,9 @@ export class GlobalSettings {
   }
 
   static getAttachmentsEnabled() {
-    const { public: { attachments: { enabled = false } = {} } } = Meteor.settings;
+    const {
+      public: { attachments: { enabled = false } = {} },
+    } = Meteor.settings;
     return enabled;
   }
 

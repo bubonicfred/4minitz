@@ -2,11 +2,10 @@ const mongo = require("mongodb").MongoClient;
 const mongoUriParser = require("mongo-uri");
 const transformUser = require("./transformUser");
 
-
 import { Random } from "../../tests/performance/fixtures/lib/random";
 
 const _transformUsers = (settings, users) =>
-  users.map(user => transformUser(settings, user));
+  users.map((user) => transformUser(settings, user));
 
 const _connectMongo = (mongoUrl) => mongo.connect(mongoUrl);
 
@@ -30,35 +29,37 @@ const _insertUsers = (client, mongoUri, users) => {
         .db(mongoConnection.database)
         .collection("users")
         .initializeUnorderedBulkOp();
-users.forEach((user) => {
-  if (user?.username && user.emails[0] && user.emails[0].address) {
-    user.isLDAPuser = true;
-    const usrRegExp = new RegExp(
-      `^${RegExp.escape(user.username)}$`,
-      "i",
-    );
-    bulk
-      .find({ username: usrRegExp })
-      .upsert()
-      .updateOne({
-        $setOnInsert: {
-          _id: Random.generateId(),
-          // by setting this only on insert we won't log out everyone
-          // everytime we sync the users
-          services: {
-            password: { bcrypt: "" },
-            resume: { loginTokens: [] },
-          },
-        },
-        $set: user,
+      users.forEach((user) => {
+        if (user?.username && user.emails[0] && user.emails[0].address) {
+          user.isLDAPuser = true;
+          const usrRegExp = new RegExp(
+            `^${RegExp.escape(user.username)}$`,
+            "i",
+          );
+          bulk
+            .find({ username: usrRegExp })
+            .upsert()
+            .updateOne({
+              $setOnInsert: {
+                _id: Random.generateId(),
+                // by setting this only on insert we won't log out everyone
+                // everytime we sync the users
+                services: {
+                  password: { bcrypt: "" },
+                  resume: { loginTokens: [] },
+                },
+              },
+              $set: user,
+            });
+          return;
+        }
+        const stringifiedUser = JSON.stringify(user, null, 2);
+        console.log(
+          `SKIPPED INVALID USER (no username or no valid emails[0].address): ${
+            stringifiedUser
+          }`,
+        );
       });
-    return;
-  }
-  const stringifiedUser = JSON.stringify(user, null, 2);
-  console.log(
-    `SKIPPED INVALID USER (no username or no valid emails[0].address): ${stringifiedUser}`,
-  );
-});
       const bulkResult = bulk.execute();
 
       resolve({ client, bulkResult });

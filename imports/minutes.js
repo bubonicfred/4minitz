@@ -4,7 +4,6 @@ import "./collections/workflow_private";
 import { emailAddressRegExpMatch } from "/imports/helpers/email";
 import { subElementsHelper } from "/imports/helpers/subElements";
 import { User } from "/imports/user";
-import { Util as _ } from "./helpers/utils";
 import { Meteor } from "meteor/meteor";
 import { Random } from "meteor/random";
 import { i18n } from "meteor/universe:i18n";
@@ -12,6 +11,7 @@ import { i18n } from "meteor/universe:i18n";
 import { ActionItem } from "./actionitem";
 import { MinutesSchema } from "./collections/minutes.schema";
 import { StringUtils } from "./helpers/string-utils";
+import { Util as _ } from "./helpers/utils";
 import { MeetingSeries } from "./meetingseries";
 import { Topic } from "./topic";
 

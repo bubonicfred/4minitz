@@ -51,40 +51,40 @@ const { MeetingSeries } = proxyquire("../../../imports/meetingseries", {
   "./services/minutesFinder": { MinutesFinder, "@noCallThru": true },
 });
 // skipcq: JS-0241
-describe("MeetingSeries", function() {
-    // skipcq: JS-0241
-  describe("#constructor", function() {
+describe("MeetingSeries", function () {
+  // skipcq: JS-0241
+  describe("#constructor", function () {
     let meetingSeries;
-// skipcq: JS-0241
-    beforeEach(function() {
+    // skipcq: JS-0241
+    beforeEach(function () {
       meetingSeries = {
         project: "foo",
         name: "bar",
       };
     });
-// skipcq: JS-0241
-    it("sets the project correctly", function() {
+    // skipcq: JS-0241
+    it("sets the project correctly", function () {
       const ms = new MeetingSeries(meetingSeries);
 
       expect(ms.project).to.equal(meetingSeries.project);
     });
-// skipcq: JS-0241
-    it("sets the name correctly", function() {
+    // skipcq: JS-0241
+    it("sets the name correctly", function () {
       const ms = new MeetingSeries(meetingSeries);
 
       expect(ms.name).to.equal(meetingSeries.name);
     });
   });
-// skipcq: JS-0241
-  describe("#getMinimumAllowedDateForMinutes", function() {
+  // skipcq: JS-0241
+  describe("#getMinimumAllowedDateForMinutes", function () {
     let series;
 
     // skipcq: JS-0241
-    beforeEach(function() {
+    beforeEach(function () {
       series = new MeetingSeries();
     });
-// skipcq: JS-0241
-    afterEach(function() {
+    // skipcq: JS-0241
+    afterEach(function () {
       if (Object.prototype.hasOwnProperty.call(Minutes, "findAllIn")) {
         delete Minutes.findAllIn;
       }
@@ -101,8 +101,8 @@ describe("MeetingSeries", function() {
         expectedDate.getDay(),
       );
     }
-// skipcq: JS-0241
-    it("retrieves the date of the lastMinutes() if no id is given", function() {
+    // skipcq: JS-0241
+    it("retrieves the date of the lastMinutes() if no id is given", function () {
       const expectedDate = new Date();
 
       MinutesFinder.result = { date: expectedDate };
@@ -111,8 +111,8 @@ describe("MeetingSeries", function() {
 
       compareDates(actualDate, expectedDate);
     });
-// skipcq: JS-0241
-    it("gets the date from the second to last minute if id of last minute is given", function() {
+    // skipcq: JS-0241
+    it("gets the date from the second to last minute if id of last minute is given", function () {
       const lastMinuteId = "lastMinuteId";
       const expectedDate = new Date();
 
@@ -131,8 +131,8 @@ describe("MeetingSeries", function() {
 
       compareDates(actualDate, expectedDate);
     });
-// skipcq: JS-0241
-    it("gets the date from the last minute if id of second to last minute is given", function() {
+    // skipcq: JS-0241
+    it("gets the date from the last minute if id of second to last minute is given", function () {
       const secondToLastMinuteId = "minuteId";
       const expectedDate = new Date();
 
@@ -153,24 +153,24 @@ describe("MeetingSeries", function() {
       compareDates(actualDate, expectedDate);
     });
   });
-// skipcq: JS-0241
-  describe("#save", function() {
+  // skipcq: JS-0241
+  describe("#save", function () {
     let meetingSeries;
-// skipcq: JS-0241
-    beforeEach(function() {
+    // skipcq: JS-0241
+    beforeEach(function () {
       meetingSeries = new MeetingSeries({
         project: "foo",
         name: "bar",
       });
     });
-// skipcq: JS-0241
-    it("calls the meteor method meetingseries.insert", function() {
+    // skipcq: JS-0241
+    it("calls the meteor method meetingseries.insert", function () {
       meetingSeries.save();
 
       expect(Meteor.callAsync.calledOnce).to.be.true;
     });
-// skipcq: JS-0241
-    it("sends the document to the meteor method meetingseries.insert", function() {
+    // skipcq: JS-0241
+    it("sends the document to the meteor method meetingseries.insert", function () {
       meetingSeries.save();
 
       expect(Meteor.callAsync.calledWith("meetingseries.insert", meetingSeries))

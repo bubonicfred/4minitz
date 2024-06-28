@@ -11,9 +11,10 @@
 
 import "./collections/minutes_private";
 
-import { subElementsHelper } from "./helpers/subElements";
 import { Meteor } from "meteor/meteor";
 import { Random } from "meteor/random";
+
+import { subElementsHelper } from "./helpers/subElements";
 import { InfoItem } from "./infoitem";
 import { InfoItemFactory } from "./InfoItemFactory";
 import { MeetingSeries } from "./meetingseries";
@@ -67,13 +68,16 @@ function resolveTopic(parentElement, source) {
     }
   }
 
-  source = Object.assign({
-    isOpen: true,
-    isNew: true,
-    isRecurring: false,
-    labels: [],
-    isSkipped: false,
-  }, source);
+  source = Object.assign(
+    {
+      isOpen: true,
+      isNew: true,
+      isRecurring: false,
+      labels: [],
+      isSkipped: false,
+    },
+    source,
+  );
 
   return source;
 }
@@ -141,7 +145,6 @@ export class Topic {
     return false;
   }
 
-
   /**
    * Returns a string representation of the Topic object.
    * @todo Replace with string utils method
@@ -172,8 +175,8 @@ export class Topic {
   }
 
   /**
-   * Checks if the topic is finally completed (will not show up in future minutes).
-   * A topic is considered finally completed if:
+   * Checks if the topic is finally completed (will not show up in future
+   * minutes). A topic is considered finally completed if:
    * - The document is not open
    * - There are no open action items
    * - The topic is not recurring

@@ -1,4 +1,3 @@
-
 /**
  * A InfoItem is a sub-element of
  * a topic which has a subject,>
@@ -8,6 +7,7 @@
 import { _ } from "lodash";
 import { Meteor } from "meteor/meteor";
 import { Random } from "meteor/random";
+
 import { formatDateISO8601 } from "./helpers/date.js";
 import { StringUtils } from "./helpers/string-utils.js";
 import { User } from "./user.js";
@@ -80,7 +80,6 @@ export class InfoItem {
     return infoItemDoc.createdInMinute === minutesId;
   }
 
-
   /**
    * Invalidates the isNew flag of the info item.
    */
@@ -109,7 +108,8 @@ export class InfoItem {
    * Checks if the deletion of the info item is allowed.
    *
    * @param {string} currentMinutesId - The ID of the current minutes.
-   * @returns {boolean} - Returns true if the deletion is allowed, false otherwise.
+   * @returns {boolean} - Returns true if the deletion is allowed, false
+   *     otherwise.
    */
   isDeleteAllowed(currentMinutesId) {
     return this._infoItemDoc.createdInMinute === currentMinutesId;
@@ -134,7 +134,8 @@ export class InfoItem {
   /**
    * Adds details to the info item.
    * @param {string} minuteId - The ID of the minute.
-   * @param {string} [text] - The text of the details. Defaults to an empty string if not provided.
+   * @param {string} [text] - The text of the details. Defaults to an empty
+   *     string if not provided.
    */
   addDetails(minuteId, text) {
     if (text === undefined) text = "";
@@ -197,7 +198,8 @@ export class InfoItem {
 
   /**
    * Retrieves the details of the info item.
-   * If the details are not already initialized, an empty array is assigned to it.
+   * If the details are not already initialized, an empty array is assigned to
+   * it.
    * @returns {Array} The details of the info item.
    */
   getDetails() {
@@ -208,13 +210,13 @@ export class InfoItem {
     return this._infoItemDoc.details;
   }
 
-
   /**
    * Retrieves the details at the specified index.
    *
    * @param {number} index - The index of the details to retrieve.
    * @returns {*} The details at the specified index.
-   * @throws {Meteor.Error} Throws an error if the index is out of bounds or if the details are not available.
+   * @throws {Meteor.Error} Throws an error if the index is out of bounds or if
+   *     the details are not available.
    */
   getDetailsAt(index) {
     if (
@@ -231,9 +233,12 @@ export class InfoItem {
   /**
    * Saves the current instance asynchronously.
    * @todo factor out callback
-   * @param {Function} callback - The callback function to be called after the save operation completes.
-   * @returns {Promise} A promise that resolves with the result of the save operation.
-  //  */
+   * @param {Function} callback - The callback function to be called after the
+  save operation completes.
+   * @returns {Promise} A promise that resolves with the result of the save
+  operation.
+  //
+*/
   async save(callback = () => {}) {
     try {
       const result = await this.saveAsync();
@@ -246,8 +251,10 @@ export class InfoItem {
   /**
    * Saves the info item asynchronously.
    *
-   * @param {boolean} [insertPlacementTop=true] - Determines whether to insert the info item at the top or bottom.
-   * @returns {Promise<string>} - A promise that resolves with the ID of the saved info item.
+   * @param {boolean} [insertPlacementTop=true] - Determines whether to insert
+   *     the info item at the top or bottom.
+   * @returns {Promise<string>} - A promise that resolves with the ID of the
+   *     saved info item.
    * @throws {Error} - If there is an error while saving the info item.
    */
   async saveAsync(insertPlacementTop = true) {
@@ -270,7 +277,6 @@ export class InfoItem {
         insertPlacementTop,
       );
     } catch (error) {
-
       console.error("Error saving info item:", error);
       throw error;
     }
@@ -278,7 +284,8 @@ export class InfoItem {
 
   /**
    * Saves the item at the bottom.
-   * @returns {Promise} A promise that resolves when the save operation is complete.
+   * @returns {Promise} A promise that resolves when the save operation is
+   *     complete.
    */
   saveAtBottom() {
     return this.saveAsync(false);
@@ -295,7 +302,8 @@ export class InfoItem {
 
   /**
    * Checks if the info item is an action item.
-   * @returns {boolean} True if the info item is an action item, false otherwise.
+   * @returns {boolean} True if the info item is an action item, false
+   *     otherwise.
    */
   isActionItem() {
     return InfoItem.isActionItem(this._infoItemDoc);
@@ -334,7 +342,8 @@ export class InfoItem {
    * Checks if the info item has a label with the specified ID.
    *
    * @param {string} labelId - The ID of the label to check.
-   * @returns {boolean} - Returns true if the info item has a label with the specified ID, false otherwise.
+   * @returns {boolean} - Returns true if the info item has a label with the
+   *     specified ID, false otherwise.
    */
   hasLabelWithId(labelId) {
     let i;

@@ -7,11 +7,13 @@
  * @exports MeetingSeries
  */
 
+import "./collections/meetingseries_private";
+
 import { Meteor } from "meteor/meteor";
 import { Random } from "meteor/random";
 import moment from "moment/moment";
+
 import { MeetingSeriesSchema } from "./collections/meetingseries.schema";
-import "./collections/meetingseries_private";
 import { formatDateISO8601 } from "./helpers/date";
 import { subElementsHelper } from "./helpers/subElements";
 import { Util as _ } from "./helpers/utils";
@@ -98,7 +100,7 @@ export class MeetingSeries {
     // we return an array with just a list of visible meeting series IDs
     return MeetingSeriesSchema.find(
       { visibleFor: { $in: [userId] } },
-      { _id: 1 }
+      { _id: 1 },
     ).map((item) => item._id);
   }
 
@@ -257,7 +259,7 @@ export class MeetingSeries {
    * @returns {Promise} A promise that resolves with the result of the update.
    */
   async updateLastMinutesFields(callback) {
-    callback = callback || (() => { });
+    callback = callback || (() => {});
 
     try {
       const result = await this.updateLastMinutesFieldsAsync();
@@ -305,7 +307,8 @@ export class MeetingSeries {
 
   /**
    * Returns the date of the latest minute in the meeting series.
-   * @returns {Date|null} The date of the latest minute, or null if no minutes are found.
+   * @returns {Date|null} The date of the latest minute, or null if no minutes
+   *     are found.
    */
   _getDateOfLatestMinute() {
     const lastMinutes = MinutesFinder.lastMinutesOfMeetingSeries(this);
@@ -337,7 +340,7 @@ export class MeetingSeries {
       return;
     }
     const firstNonMatchingMinute = latestMinutes.find(
-      (minute) => minute._id !== minuteId
+      (minute) => minute._id !== minuteId,
     );
     if (firstNonMatchingMinute) {
       return new Date(firstNonMatchingMinute.date);
@@ -398,7 +401,7 @@ export class MeetingSeries {
     if (!this._id) {
       throw new Meteor.Error(
         "MeetingSeries not saved.",
-        "Call save() before using addVisibleUser()"
+        "Call save() before using addVisibleUser()",
       );
     }
     if (!Array.isArray(newVisibleForArray)) {
@@ -472,7 +475,7 @@ export class MeetingSeries {
     return subElementsHelper.getElementById(
       labelName,
       this.availableLabels,
-      "name"
+      "name",
     );
   }
 
@@ -501,7 +504,7 @@ export class MeetingSeries {
   removeLabel(id) {
     const index = subElementsHelper.findIndexById(
       id,
-      this.getAvailableLabels()
+      this.getAvailableLabels(),
     );
     if (undefined === index) {
       return;

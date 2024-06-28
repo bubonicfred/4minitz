@@ -4,12 +4,12 @@ import { configureSelect2Responsibles } from "/imports/client/ResponsibleSearch"
 import { MeetingSeries } from "/imports/meetingseries";
 import { Minutes } from "/imports/minutes";
 import { Topic } from "/imports/topic";
-import { Util as _ } from "../../../imports/helpers/utils";
 import { $ } from "meteor/jquery";
 import { Meteor } from "meteor/meteor";
 import { Session } from "meteor/session";
 import { Template } from "meteor/templating";
 
+import { Util as _ } from "../../../imports/helpers/utils";
 import { IsEditedService } from "../../../imports/services/isEditedService";
 import { isEditedHandling } from "../../helpers/isEditedHelpers";
 

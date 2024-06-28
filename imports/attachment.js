@@ -1,5 +1,5 @@
-import { Util as _ } from "./helpers/utils";
 import { AttachmentsCollection } from "./collections/attachments_private";
+import { Util as _ } from "./helpers/utils";
 import { Minutes } from "./minutes";
 import { UserRoles } from "./userroles";
 
@@ -7,11 +7,11 @@ import { UserRoles } from "./userroles";
  * Represents an attachment in the system.
  */
 export class Attachment {
-/**
- * Represents an Attachment object.
- *
- * @param {string} attachmentID - The ID of the attachment.
- */
+  /**
+   * Represents an Attachment object.
+   *
+   * @param {string} attachmentID - The ID of the attachment.
+   */
   constructor(attachmentID) {
     this._roles = new UserRoles(this.userId);
     if (!this._roles) {
@@ -25,39 +25,39 @@ export class Attachment {
     }
   }
 
-/**
- * Finds attachments for a given meeting minutes ID.
- *
- * @param {string} minID - The ID of the meeting minutes.
- * @returns {Mongo.Cursor} - A cursor pointing to the attachments found.
- */
+  /**
+   * Finds attachments for a given meeting minutes ID.
+   *
+   * @param {string} minID - The ID of the meeting minutes.
+   * @returns {Mongo.Cursor} - A cursor pointing to the attachments found.
+   */
   static findForMinutes(minID) {
     return AttachmentsCollection.find({ "meta.meetingminutes_id": minID });
   }
 
-/**
- * Returns the total count of all attachments in the collection.
- *
- * @returns {number} The count of attachments.
- */
+  /**
+   * Returns the total count of all attachments in the collection.
+   *
+   * @returns {number} The count of attachments.
+   */
   static countAll() {
     return AttachmentsCollection.find().count();
   }
 
-/**
- * Returns the count of attachments associated with a given minute ID.
- *
- * @param {string} minID - The ID of the minute.
- * @returns {number} The count of attachments.
- */
+  /**
+   * Returns the count of attachments associated with a given minute ID.
+   *
+   * @param {string} minID - The ID of the minute.
+   * @returns {number} The count of attachments.
+   */
   static countForMinutes(minID) {
     return Attachment.findForMinutes(minID).count();
   }
 
-/**
- * Calculates the total size of all attachments in the collection.
- * @returns {number} The total size of all attachments in bytes.
- */
+  /**
+   * Calculates the total size of all attachments in the collection.
+   * @returns {number} The total size of all attachments in bytes.
+   */
   static countAllBytes() {
     const atts = AttachmentsCollection.find({}, { size: 1 });
     let sumBytes = 0;
@@ -67,16 +67,20 @@ export class Attachment {
     return sumBytes;
   }
 
-/**
- * Uploads a file to the AttachmentsCollection.
- *
- * @param {string} uploadFilename - The name of the file to be uploaded.
- * @param {object} minutesObj - The minutes object to which the file is associated.
- * @param {object} callbacks - Optional callbacks for different upload events.
- * @param {function} callbacks.onStart - Callback function to be called when the upload starts.
- * @param {function} callbacks.onEnd - Callback function to be called when the upload ends.
- * @param {function} callbacks.onAbort - Callback function to be called when the upload is aborted.
- */
+  /**
+   * Uploads a file to the AttachmentsCollection.
+   *
+   * @param {string} uploadFilename - The name of the file to be uploaded.
+   * @param {object} minutesObj - The minutes object to which the file is
+   *     associated.
+   * @param {object} callbacks - Optional callbacks for different upload events.
+   * @param {function} callbacks.onStart - Callback function to be called when
+   *     the upload starts.
+   * @param {function} callbacks.onEnd - Callback function to be called when the
+   *     upload ends.
+   * @param {function} callbacks.onAbort - Callback function to be called when
+   *     the upload is aborted.
+   */
   static uploadFile(uploadFilename, minutesObj, callbacks = {}) {
     const doNothing = () => {};
     callbacks = _.assignIn(
@@ -114,11 +118,11 @@ export class Attachment {
     upload.start();
   }
 
-
-/**
- * Checks if the current user is the uploader and the owner of the file.
- * @returns {boolean} Returns true if the current user is the uploader and the owner of the file, otherwise returns false.
- */
+  /**
+   * Checks if the current user is the uploader and the owner of the file.
+   * @returns {boolean} Returns true if the current user is the uploader and the
+   *     owner of the file, otherwise returns false.
+   */
   isUploaderAndFileOwner() {
     return (
       this._roles.isUploaderFor(this._file.meta.parentseries_id) &&
@@ -126,10 +130,11 @@ export class Attachment {
     );
   }
 
-/**
- * Checks if the current user is a moderator.
- * @returns {boolean} Returns true if the current user is a moderator, otherwise false.
- */
+  /**
+   * Checks if the current user is a moderator.
+   * @returns {boolean} Returns true if the current user is a moderator,
+   *     otherwise false.
+   */
   isModerator() {
     return this._roles.isModeratorOf(this._file.meta.parentseries_id);
   }

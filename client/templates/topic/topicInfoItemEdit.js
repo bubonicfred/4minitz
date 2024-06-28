@@ -7,7 +7,6 @@ import { Minutes } from "/imports/minutes";
 import { Priority } from "/imports/priority";
 import { Topic } from "/imports/topic";
 import { User, userSettings } from "/imports/user";
-import { _ } from "../../../imports/helpers/utls";
 import { Meteor } from "meteor/meteor";
 import { ReactiveDict } from "meteor/reactive-dict";
 import { ReactiveVar } from "meteor/reactive-var";
@@ -16,6 +15,7 @@ import { i18n } from "meteor/universe:i18n";
 import moment from "moment/moment";
 import isEmail from "validator/lib/isEmail";
 
+import { _ } from "../../../imports/helpers/utls";
 import { IsEditedService } from "../../../imports/services/isEditedService";
 import { ConfirmationDialogFactory } from "../../helpers/confirmationDialogFactory";
 import { isEditedHandling } from "../../helpers/isEditedHelpers";

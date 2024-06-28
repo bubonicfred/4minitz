@@ -1,7 +1,8 @@
-import { Util as _ } from "./utils";
 import { Blaze } from "meteor/blaze";
 import { Template } from "meteor/templating";
 import { i18n } from "meteor/universe:i18n";
+
+import { Util as _ } from "./utils";
 
 const DIALOG_TEMPLATE = Template.confirmationDialog;
 
