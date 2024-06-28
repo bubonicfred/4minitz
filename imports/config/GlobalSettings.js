@@ -1,5 +1,5 @@
-import { LdapSettings } from "/imports/config/LdapSettings";
-import { Meteor } from "meteor/meteor";
+import {LdapSettings} from "/imports/config/LdapSettings";
+import {Meteor} from "meteor/meteor";
 
 function getSetting(path, def = undefined) {
   return Meteor.settings?.[path] ?? def;
@@ -26,7 +26,14 @@ export class GlobalSettings {
   }
 
   static publishEmailSettings() {
-    const { email: { enableMailDelivery = false, sendVerificationEmail = false, showResendVerificationEmailLink = false, showForgotPasswordLink = false } = {} } = Meteor.settings;
+    const {
+      email : {
+        enableMailDelivery = false,
+        sendVerificationEmail = false,
+        showResendVerificationEmailLink = false,
+        showForgotPasswordLink = false
+      } = {}
+    } = Meteor.settings;
     Meteor.settings.public = {
       ...Meteor.settings.public,
       enableMailDelivery,
@@ -37,7 +44,15 @@ export class GlobalSettings {
   }
 
   static publishBrandingSettings() {
-    const { branding: { topLeftLogoHTML = "4Minitz.com", showGithubCorner = true, showInfoOnLogin = true, createDemoAccount = false, legalNotice = { enabled: false, linkText: "", content: [""] } } = {} } = Meteor.settings.public;
+    const {
+      branding : {
+        topLeftLogoHTML = "4Minitz.com",
+        showGithubCorner = true,
+        showInfoOnLogin = true,
+        createDemoAccount = false,
+        legalNotice = { enabled: false, linkText: "", content: [ "" ] }
+      } = {}
+    } = Meteor.settings.public;
     Meteor.settings.public.branding = {
       topLeftLogoHTML,
       showGithubCorner,
@@ -49,22 +64,26 @@ export class GlobalSettings {
 
   static publishAttachmentSettings() {
     Meteor.settings.public.attachments = {
-      enabled: getSetting('attachments.enabled', false),
-      allowExtensions: getSetting('attachments.allowExtensions', ".*"),
-      denyExtensions: getSetting('attachments.denyExtensions', "exe|app|bat|sh|cmd|com|cpl|exe|gad|hta|inf|jar|jpe|jse|lnk|msc|msh|msi|msp|pif|ps1|ps2|psc|reg|scf|scr|vbe|vbs|wsc|wsf|wsh"),
-      maxFileSize: getSetting('attachments.maxFileSize', 10 * 1024 * 1024), // default: 10 MB
+      enabled : getSetting('attachments.enabled', false),
+      allowExtensions : getSetting('attachments.allowExtensions', ".*"),
+      denyExtensions : getSetting(
+          'attachments.denyExtensions',
+          "exe|app|bat|sh|cmd|com|cpl|exe|gad|hta|inf|jar|jpe|jse|lnk|msc|msh|msi|msp|pif|ps1|ps2|psc|reg|scf|scr|vbe|vbs|wsc|wsf|wsh"),
+      maxFileSize : getSetting('attachments.maxFileSize',
+                               10 * 1024 * 1024), // default: 10 MB
     };
   }
 
   static publishDocGenerationSettings() {
     Meteor.settings.public.docGeneration = {
-      enabled: getSetting('docGeneration.enabled', false),
-      format: getSetting('docGeneration.format', "html"),
+      enabled : getSetting('docGeneration.enabled', false),
+      format : getSetting('docGeneration.format', "html"),
     };
   }
 
   static publishAccountCreationSettings() {
-    Meteor.settings.public.forbidClientAccountCreation = getSetting('forbidClientAccountCreation', false);
+    Meteor.settings.public.forbidClientAccountCreation =
+        getSetting('forbidClientAccountCreation', false);
   }
 
   static enforceStoragePathSlash() {
@@ -90,7 +109,7 @@ export class GlobalSettings {
 
   static getRootUrl(path) {
     if (Meteor.settings.ROOT_URL) {
-      return Meteor.absoluteUrl(path, { rootUrl: Meteor.settings.ROOT_URL });
+      return Meteor.absoluteUrl(path, {rootUrl : Meteor.settings.ROOT_URL});
     }
 
     return Meteor.absoluteUrl(path);
@@ -98,7 +117,7 @@ export class GlobalSettings {
 
   static hasImportUsersCronTab() {
     return Boolean(
-      Meteor.settings.ldap?.enabled && Meteor.settings.ldap.importCronTab,
+        Meteor.settings.ldap?.enabled && Meteor.settings.ldap.importCronTab,
     );
   }
 
@@ -119,9 +138,7 @@ export class GlobalSettings {
     return false;
   }
 
-  static getLDAPSettings() {
-    return Meteor.settings.ldap || {};
-  }
+  static getLDAPSettings() { return Meteor.settings.ldap || {}; }
 
   static isTrustedIntranetInstallation() {
     // returns false instead of undefined
@@ -129,7 +146,8 @@ export class GlobalSettings {
   }
 
   static getDefaultLabels() {
-    if (!Meteor.settings.defaultLabels) return [];
+    if (!Meteor.settings.defaultLabels)
+      return [];
 
     return Meteor.settings.defaultLabels;
   }
@@ -143,21 +161,18 @@ export class GlobalSettings {
 
   static getDefaultEmailSenderAddress(alternativeSender) {
     let address = Meteor.settings.email
-      ? Meteor.settings.email.defaultEMailSenderAddress
-      : undefined;
+                      ? Meteor.settings.email.defaultEMailSenderAddress
+                      : undefined;
 
-    if (
-      address &&
-      alternativeSender &&
-      Meteor.settings.email &&
-      Meteor.settings.email.defaultEMailSenderExceptionDomains &&
-      Meteor.settings.email.defaultEMailSenderExceptionDomains.length > 0
-    ) {
-      const senderDomain = alternativeSender.replace(/^.*@/, "").toLowerCase(); // me@mycompany.com => mycompany.com
-      for (const defaultEMailSenderExceptionDomain of Meteor.settings.email.defaultEMailSenderExceptionDomains) {
-        if (
-          defaultEMailSenderExceptionDomain.toLowerCase() === senderDomain
-        ) {
+    if (address && alternativeSender && Meteor.settings.email &&
+        Meteor.settings.email.defaultEMailSenderExceptionDomains &&
+        Meteor.settings.email.defaultEMailSenderExceptionDomains.length > 0) {
+      const senderDomain =
+          alternativeSender.replace(/^.*@/, "")
+              .toLowerCase(); // me@mycompany.com => mycompany.com
+      for (const defaultEMailSenderExceptionDomain of
+               Meteor.settings.email.defaultEMailSenderExceptionDomains) {
+        if (defaultEMailSenderExceptionDomain.toLowerCase() === senderDomain) {
           address = alternativeSender;
           break;
         }
@@ -169,8 +184,9 @@ export class GlobalSettings {
       if (address === "") {
         // but it's empty!
         return alternativeSender // luckily we have a real user profile mail
-          ? alternativeSender // we take it!
-          : GlobalSettings.getFallbackEMailSenderAddress(); // nope. use
+                   ? alternativeSender // we take it!
+                   : GlobalSettings
+                         .getFallbackEMailSenderAddress(); // nope. use
         // fallback!
       } else {
         return address;
@@ -178,8 +194,8 @@ export class GlobalSettings {
     }
 
     throw new Meteor.Error(
-      "illegal-state",
-      "defaultEMailSenderAddress not defined in settings",
+        "illegal-state",
+        "defaultEMailSenderAddress not defined in settings",
     );
   }
 
@@ -189,8 +205,8 @@ export class GlobalSettings {
     }
 
     throw new Meteor.Error(
-      "illegal-state",
-      "fallback email sender address required but not defined in settings",
+        "illegal-state",
+        "fallback email sender address required but not defined in settings",
     );
   }
 
@@ -212,8 +228,8 @@ export class GlobalSettings {
   static sendVerificationEmail() {
     const mailEnabled = getSetting("email.enableMailDelivery", false);
     const sendVerificationEmail = getSetting(
-      "email.sendVerificationEmail",
-      false,
+        "email.sendVerificationEmail",
+        false,
     );
     return mailEnabled && sendVerificationEmail;
   }
@@ -221,8 +237,8 @@ export class GlobalSettings {
   static showResendVerificationEmailLink() {
     const mailEnabled = getSetting("email.enableMailDelivery", false);
     const showResendVerificationEmailLink = getSetting(
-      "email.showResendVerificationEmailLink",
-      false,
+        "email.showResendVerificationEmailLink",
+        false,
     );
 
     return mailEnabled && showResendVerificationEmailLink;
@@ -231,8 +247,8 @@ export class GlobalSettings {
   static showForgotPasswordLink() {
     const mailEnabled = getSetting("email.enableMailDelivery", false);
     const showForgotPasswordLink = getSetting(
-      "email.showForgotPasswordLink",
-      false,
+        "email.showForgotPasswordLink",
+        false,
     );
 
     return mailEnabled && showForgotPasswordLink;
@@ -251,8 +267,8 @@ export class GlobalSettings {
     }
 
     throw new Meteor.Error(
-      "illegal-state",
-      "mailgun settings not defined in meteor settings",
+        "illegal-state",
+        "mailgun settings not defined in meteor settings",
     );
   }
 
@@ -273,7 +289,7 @@ export class GlobalSettings {
   }
 
   static getAttachmentsEnabled() {
-    const { public: { attachments: { enabled = false } = {} } } = Meteor.settings;
+    const {public : {attachments : {enabled = false} = {}}} = Meteor.settings;
     return enabled;
   }
 
