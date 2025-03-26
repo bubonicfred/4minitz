@@ -100,7 +100,7 @@
     "chromedriver": "^124.0.4",
     "clone": "^2.1.1",
     "eslint": "^9.5.0",
-    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-deprecate": "^0.8.5",
     "eslint-plugin-jsdoc": "^48.2.9",
     "eslint-plugin-lodash": "^8.0.0",
