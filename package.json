@@ -102,7 +102,7 @@
     "eslint": "^9.5.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-deprecate": "^0.8.5",
-    "eslint-plugin-jsdoc": "^48.2.9",
+    "eslint-plugin-jsdoc": "^50.6.17",
     "eslint-plugin-lodash": "^8.0.0",
     "eslint-plugin-meteor": "^7.3.0",
     "eslint-plugin-mocha": "^10.2.0",
