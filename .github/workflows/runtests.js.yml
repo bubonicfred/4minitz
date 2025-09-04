@@ -15,7 +15,7 @@ jobs:
           key: ${{ runner.os }}-node18-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node18-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "18.13.0"
           cache: "npm"
@@ -51,7 +51,7 @@ jobs:
           - MeetingSeriesEdit-test.js
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: "^14.21.3"
           cache: "npm"
