@@ -96,7 +96,7 @@
     "@wdio/mocha-framework": "^8.38.0",
     "@wdio/spec-reporter": "^8.38.0",
     "babel-plugin-meteor-tracker-async-enhance": "^1.0.2",
-    "chai": "^4.1.2",
+    "chai": "^6.2.0",
     "chromedriver": "^124.0.4",
     "clone": "^2.1.1",
     "eslint": "^9.5.0",
