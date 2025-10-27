@@ -91,7 +91,7 @@ jobs:
       - run: ./tests/run_e2e.sh tests/end2end/${{ matrix.e2etest }}
       - name: Upload E2E Artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: E2E Artifacts-${{ matrix.e2etest }}
           path: |
