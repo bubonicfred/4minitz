@@ -9,7 +9,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Cache Node modules directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node18-${{ hashFiles('**/package-lock.json') }}
@@ -71,14 +71,14 @@ jobs:
       - run: node --version
       - run: meteor --version
       - name: Cache Node modules directory
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node14-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node14-
       - name: Cache Chromedriver
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /home/runner/work/4minitz/4minitz/node_modules/chromedriver
           key: chromedriver-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
