@@ -61,7 +61,7 @@
     "fibers": "^5.0.3",
     "fs-extra": "^11.2.0",
     "git-rev-sync": "^3.0.2",
-    "jquery": "^3.3.1",
+    "jquery": "^4.0.0",
     "jquery-ui": "^1.13.3",
     "ldapjs": "^3.0.7",
     "lodash": "^4.17.10",
