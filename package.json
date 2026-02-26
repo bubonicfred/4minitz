@@ -90,7 +90,7 @@
     "@eslint/compat": "^1.1.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.5.0",
-    "@stylistic/eslint-plugin": "^2.3.0",
+    "@stylistic/eslint-plugin": "^5.9.0",
     "@wdio/cli": "^8.38.1",
     "@wdio/local-runner": "^8.38.0",
     "@wdio/mocha-framework": "^8.38.0",
