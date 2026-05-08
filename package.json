@@ -99,7 +99,7 @@
     "chai": "^4.1.2",
     "chromedriver": "^124.0.4",
     "clone": "^2.1.1",
-    "eslint": "^9.5.0",
+    "eslint": "^10.3.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-deprecate": "^0.8.5",
     "eslint-plugin-jsdoc": "^48.2.9",
