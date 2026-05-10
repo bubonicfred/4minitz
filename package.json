@@ -107,7 +107,7 @@
     "eslint-plugin-meteor": "^7.3.0",
     "eslint-plugin-mocha": "^10.2.0",
     "eslint-plugin-mocha-cleanup": "^1.11.3",
-    "eslint-plugin-no-jquery": "^3.0.2",
+    "eslint-plugin-no-jquery": "^4.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.2.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.13.0",
