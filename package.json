@@ -50,7 +50,7 @@
   },
   "homepage": "https://www.4minitz.com",
   "dependencies": {
-    "@babel/runtime": "^7.24.7",
+    "@babel/runtime": "^8.0.5",
     "@faker-js/faker": "^8.4.1",
     "arrive": "^2.4.1",
     "bcrypt": "^5.1.0",
@@ -80,13 +80,13 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.7",
-    "@babel/core": "^7.24.7",
+    "@babel/cli": "^8.0.5",
+    "@babel/core": "^8.0.5",
     "@babel/eslint-parser": "^7.24.7",
     "@babel/eslint-plugin": "^7.24.7",
     "@babel/plugin-transform-runtime": "^7.24.7",
-    "@babel/preset-env": "^7.24.7",
-    "@babel/register": "^7.24.6",
+    "@babel/preset-env": "^8.0.5",
+    "@babel/register": "^8.0.5",
     "@eslint/compat": "^1.1.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.5.0",
